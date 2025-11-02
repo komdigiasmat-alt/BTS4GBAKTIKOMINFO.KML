@@ -1,42 +1,56 @@
 <!DOCTYPE html>
-<html>
+<html lang="id">
   <head>
-    <meta charset="utf-8" />
-    <title>BTS 4G BAKTI KOMINFO</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Peta BTS 4G BAKTI KOMINFO</title>
     <style>
       html, body, #map {
         height: 100%;
         margin: 0;
         padding: 0;
       }
+      #header {
+        position: absolute;
+        top: 10px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(0,0,0,0.5);
+        color: white;
+        padding: 8px 16px;
+        border-radius: 10px;
+        font-size: 16px;
+        z-index: 1000;
+      }
     </style>
     <script src="https://maps.googleapis.com/maps/api/js"></script>
     <script>
       function initMap() {
+        // Inisialisasi peta
         const map = new google.maps.Map(document.getElementById("map"), {
+          zoom: 6,
           center: { lat: -5.5, lng: 138.7 },
-          zoom: 7,
           mapTypeId: "satellite",
         });
 
+        // Layer KML dari GitHub (RAW link)
         const kmlLayer = new google.maps.KmlLayer({
           url: "https://raw.githubusercontent.com/komdigiasmat-alt/BTS4GBAKTIKOMINFO.KML/main/BTS4GBAKTIKOMINFO.KML.kml",
           map: map,
-          preserveViewport: false,
+          preserveViewport: true,
         });
 
-        kmlLayer.addListener("click", function (event) {
-          const content = event.featureData.name || "📡 Lokasi BTS";
-          const infowindow = new google.maps.InfoWindow({
-            content: `<div style='font-size:16px;font-weight:bold;'>${content}</div>`,
-            position: event.latLng,
-          });
-          infowindow.open(map);
+        // Jika ada error memuat KML
+        kmlLayer.addListener("status_changed", () => {
+          if (kmlLayer.getStatus() !== "OK") {
+            alert("⚠️ Gagal memuat data KML. Pastikan file .kml bersifat public dan URL benar.");
+          }
         });
       }
     </script>
   </head>
   <body onload="initMap()">
+    <div id="header">📡 PETA BTS 4G BAKTI KOMINFO</div>
     <div id="map"></div>
   </body>
 </html>
