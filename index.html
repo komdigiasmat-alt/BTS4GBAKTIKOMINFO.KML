@@ -10,17 +10,18 @@
         margin: 0;
         padding: 0;
       }
-      #header {
+      #info {
         position: absolute;
         top: 10px;
         left: 50%;
         transform: translateX(-50%);
-        background: rgba(0,0,0,0.5);
+        background: rgba(0,0,0,0.6);
         color: white;
-        padding: 8px 16px;
+        padding: 6px 14px;
         border-radius: 10px;
-        font-size: 16px;
-        z-index: 1000;
+        font-size: 15px;
+        font-family: Arial, sans-serif;
+        z-index: 9999;
       }
     </style>
     <script src="https://maps.googleapis.com/maps/api/js"></script>
@@ -30,27 +31,30 @@
         const map = new google.maps.Map(document.getElementById("map"), {
           zoom: 6,
           center: { lat: -5.5, lng: 138.7 },
-          mapTypeId: "satellite",
+          mapTypeId: "satellite"
         });
 
-        // Layer KML dari GitHub (RAW link)
+        // URL file KML kamu (RAW)
+        const kmlUrl = "https://raw.githubusercontent.com/komdigiasmat-alt/BTS4GBAKTIKOMINFO.KML/main/BTS4GBAKTIKOMINFO.KML.kml";
+
+        // Tambahkan KML Layer
         const kmlLayer = new google.maps.KmlLayer({
-          url: "https://raw.githubusercontent.com/komdigiasmat-alt/BTS4GBAKTIKOMINFO.KML/main/BTS4GBAKTIKOMINFO.KML.kml",
+          url: kmlUrl,
           map: map,
-          preserveViewport: true,
+          preserveViewport: true
         });
 
-        // Jika ada error memuat KML
+        // Jika gagal memuat file KML
         kmlLayer.addListener("status_changed", () => {
           if (kmlLayer.getStatus() !== "OK") {
-            alert("⚠️ Gagal memuat data KML. Pastikan file .kml bersifat public dan URL benar.");
+            alert("⚠️ File KML gagal dimuat. Pastikan nama file dan URL benar.");
           }
         });
       }
     </script>
   </head>
   <body onload="initMap()">
-    <div id="header">📡 PETA BTS 4G BAKTI KOMINFO</div>
+    <div id="info">📡 PETA BTS 4G BAKTI KOMINFO</div>
     <div id="map"></div>
   </body>
 </html>
